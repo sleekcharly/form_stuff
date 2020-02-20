@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import FormField from '../utils/formFields';
 
 class FormOne extends Component {
 
@@ -43,11 +44,14 @@ class FormOne extends Component {
                 <form>
                     <div className="form-group">
                         <label>Name</label>
-                        <input 
+                        <FormField 
+                            formData={this.state.formData.name}
+                        />
+                        {/*<input 
                             type="text"
                             className="form-control"
                             name="name_input"
-                        />
+                        />*/}
                     </div>
                     <div className="form-group">
                         <label>Lastname</label>
