@@ -20,7 +20,10 @@ class FormOne extends Component {
                 valid: false,
                 touched: false,
                 validationMessage: ''
-            }
+            },
+            lastname:{},
+            age: {},
+            message: {}
         }
     }
 
@@ -37,6 +40,22 @@ class FormOne extends Component {
         })
     }
 
+    updateForm = (element) => {
+        const newFormData = {
+            ...this.state.formData
+        }
+
+        const newElement = {
+            ...newFormData[element.id]
+        }
+
+        newElement.value = element.event.target.value;
+        newFormData[element.id] = newElement;
+
+        this.setState({
+            formData: newFormData
+        });
+    }
 
     render(){
         return(
@@ -46,6 +65,8 @@ class FormOne extends Component {
                         <label>Name</label>
                         <FormField 
                             formData={this.state.formData.name}
+                            id="name"
+                            change={(element) => this.updateForm(element)}
                         />
                         {/*<input 
                             type="text"
