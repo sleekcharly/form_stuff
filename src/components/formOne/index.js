@@ -6,6 +6,7 @@ class FormOne extends Component {
 
     state = {
         maxAge:81,
+        loading: false,
         formData:{
             name:{
                 element: 'input',
@@ -22,9 +23,51 @@ class FormOne extends Component {
                 touched: false,
                 validationMessage: ''
             },
-            lastname:{},
-            age: {},
-            message: {}
+            lastname:{
+                element: 'input',
+                value: '',
+                config: {
+                    name: 'lastname_input',
+                    type: 'text',
+                    placeholder: 'Enter your lastname'
+                },
+                validation:{
+                    required:true
+                },
+                valid: false,
+                touched: false,
+                validationMessage: ''
+            },
+            age: {
+                element: 'select',
+                value: '',
+                config: {
+                    name: 'age_input',
+                    type: 'text',
+                },
+                validation:{
+                    required:true,
+                    minNum: 20
+                },
+                valid: false,
+                touched: false,
+                validationMessage: ''
+            },
+            message: {
+                element: 'textarea',
+                value: '',
+                config: {
+                    name: 'message_input',
+                    rows: '3',
+                    placeholder: 'Enter your message here ...'
+                },
+                validation:{
+                    required:true
+                },
+                valid: false,
+                touched: false,
+                validationMessage: ''
+            }
         }
     }
 
@@ -68,9 +111,51 @@ class FormOne extends Component {
 
         this.setState({
             formData: newFormData
-        });
+        });        
+    }
 
-        console.log(newElement)
+    submitForm = (event) => {
+        event.preventDefault();
+
+        let dataToSubmit = {};
+        let formIsValid = true;
+
+
+        for(let key in this.state.formData){
+            formIsValid = this.state.formData[key].valid && formIsValid
+        }
+
+        if(formIsValid){
+
+            this.setState({loading: true});
+
+            for(let key in this.state.formData){
+                dataToSubmit[key] = this.state.formData[key].value;
+            }
+
+            setTimeout(() => {
+                this.setState({loading: false});
+                this.onSuccess();
+            }, 2000)
+        } else {
+            alert('sorry the form is not valid')
+        }
+        
+    }
+
+    onSuccess = () =>{
+        let formDataCopy = {
+            ...this.state.formData
+        }
+
+        for(let key in this.state.formData){
+            formDataCopy[key].value = '';
+            formDataCopy[key].valid = false;
+            formDataCopy[key].touched = false;
+        }
+
+        this.setState({formData : formDataCopy});
+        alert('Thank you we will reach you back');
     }
 
     render(){
@@ -84,37 +169,40 @@ class FormOne extends Component {
                             id="name"
                             change={(element) => this.updateForm(element)}
                         />
-                        {/*<input 
-                            type="text"
-                            className="form-control"
-                            name="name_input"
-                        />*/}
+
                     </div>
                     <div className="form-group">
                         <label>Lastname</label>
-                        <input 
-                            type="text"
-                            className="form-control"
-                            name="lastname_input"
+
+                        <FormField 
+                            formData={this.state.formData.lastname}
+                            id="lastname"
+                            change={(element) => this.updateForm(element)}
                         />
                     </div>
                     <div className="form-group">
                         <label>Age</label>
-                        <select
-                            name="age_input"
-                            className="form-control" 
+
+                        <FormField
+                            formData={this.state.formData.age}
+                            id="age"
+                            change={(element) => this.updateForm(element)}
                         >
-                           {this.generateOptions()}
-                        </select>
+                            <option value="">Select Age</option>
+                            {this.generateOptions()}
+                        </FormField>
+                        
                     </div>
                     
                     <div className="form-group">
                         <label>Enter your message here</label>
-                        <textarea 
-                            rows="3"
-                            placeholder="Add your message here..."
-                            className="form-control"
-                        ></textarea>
+                        <FormField
+                            formData={this.state.formData.message}
+                            id="message"
+                            change={(element) => this.updateForm(element)}
+                        >
+                        
+                        </FormField>
                     </div>
                     
                     <button 
