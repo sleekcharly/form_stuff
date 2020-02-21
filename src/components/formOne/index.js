@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import FormField from '../utils/formFields';
+import {validate} from '../utils/validate';
 
 class FormOne extends Component {
 
@@ -50,11 +51,21 @@ class FormOne extends Component {
         }
 
         newElement.value = element.event.target.value;
+
+        // check validation
+        let validateData = validate(newElement);
+        newElement.valid = validateData[0];
+        newElement.validationMessage = validateData[1];
+
+
         newFormData[element.id] = newElement;
+
 
         this.setState({
             formData: newFormData
         });
+
+        console.log(newElement)
     }
 
     render(){
