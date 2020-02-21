@@ -57,6 +57,11 @@ class FormOne extends Component {
         newElement.valid = validateData[0];
         newElement.validationMessage = validateData[1];
 
+        // catch blur
+        if(element.blur){
+            newElement.touched = element.blur
+        }
+
 
         newFormData[element.id] = newElement;
 
