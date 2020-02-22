@@ -26,7 +26,36 @@ class FormTwo extends Component {
             <>
 
                 <Formik 
-                    initialValues={{ name: '', lastname: '', age: '', message: 'Enter your message' }}
+                    initialValues={{ name: '', lastname: '', age: '', message: '' }}
+                    validate={ values => {
+                        let errors = {}
+
+                        if(!values.name){
+                            errors.name = 'Sorry the input is required'
+                        }
+                        if(!values.lastname){
+                            errors.lastname = 'Sorry the input is required'
+                        }
+
+                        if(values.age){
+                            if(values.age <= 21){
+                                errors.age = 'I am sorry the minimum is 20';
+                            }
+                        } else {
+                            errors.age = 'Sorry the age is required'
+                        }
+
+                        if(!values.message){
+                            errors.message = 'Sorry the input is required'
+                        }
+
+                        return errors;
+                    }}
+
+                    onSubmit={ values =>{
+                        ///submit to server
+                        console.log(values)
+                    }}
                 >
                     { ({
                         values,
@@ -37,7 +66,7 @@ class FormTwo extends Component {
                         handleSubmit,
                         isSubmitting,
                     }) => (
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Name</label>
                                 <input 
@@ -47,7 +76,16 @@ class FormTwo extends Component {
                                     value={values.name}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    style={{
+                                        borderColor: `${errors.name && touched.name ? 'red' : ''}`
+                                    }}
                                 />
+                                {errors.name && touched.name ? 
+                                    <div style={{color: 'red'}}>
+                                        {errors.name}
+                                    </div>
+                                : null
+                                }
                             </div>
                             <div className="form-group">
                                 <label>Lastname</label>
@@ -58,7 +96,16 @@ class FormTwo extends Component {
                                     value={values.lastname}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    style={{
+                                        borderColor: `${errors.lastname && touched.lastname ? 'red' : ''}`
+                                    }}
                                 />
+                                {errors.lastname && touched.lastname ? 
+                                    <div style={{color: 'red'}}>
+                                        {errors.lastname}
+                                    </div>
+                                : null
+                                }
                             </div>
                             <div className="form-group">
                                 <label>Age</label>
@@ -70,7 +117,14 @@ class FormTwo extends Component {
                                     onBlur={handleBlur} 
                                 >
                                 {this.generateOptions()}
+                                
                                 </select>
+                                {errors.age && touched.age ? 
+                                    <div style={{color: 'red'}}>
+                                        {errors.age}
+                                    </div>
+                                : null
+                                }
                             </div>
                             
                             <div className="form-group">
@@ -84,6 +138,12 @@ class FormTwo extends Component {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 ></textarea>
+                                {errors.message && touched.message ? 
+                                    <div style={{color: 'red'}}>
+                                        {errors.message}
+                                    </div>
+                                : null
+                                }
                             </div>
                             
                             <button 
