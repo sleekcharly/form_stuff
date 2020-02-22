@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 class FormTwo extends Component {
 
@@ -7,6 +8,13 @@ class FormTwo extends Component {
         maxAge:81,
         submitting: false
     }
+
+    myFormSchema = Yup.object().shape({
+        name: Yup.string().required('This item is required'),
+        lastname:Yup.string().required('This item is required'),
+        age:Yup.number().min(20, 'I am sorry the minimum is 20').required('This item is required'),
+        message: Yup.string().required('This item is required'),
+    })
 
     generateOptions = () => {
         const ageArray = [];
@@ -28,30 +36,31 @@ class FormTwo extends Component {
 
                 <Formik 
                     initialValues={{ name: '', lastname: '', age: '', message: '' }}
-                    validate={ values => {
-                        let errors = {}
+                    validationSchema={this.myFormSchema}
+                    // validate={ values => {
+                    //     let errors = {}
 
-                        if(!values.name){
-                            errors.name = 'Sorry the input is required'
-                        }
-                        if(!values.lastname){
-                            errors.lastname = 'Sorry the input is required'
-                        }
+                    //     if(!values.name){
+                    //         errors.name = 'Sorry the input is required'
+                    //     }
+                    //     if(!values.lastname){
+                    //         errors.lastname = 'Sorry the input is required'
+                    //     }
 
-                        if(values.age){
-                            if(values.age <= 21){
-                                errors.age = 'I am sorry the minimum is 20';
-                            }
-                        } else {
-                            errors.age = 'Sorry the age is required'
-                        }
+                    //     if(values.age){
+                    //         if(values.age <= 21){
+                    //             errors.age = 'I am sorry the minimum is 20';
+                    //         }
+                    //     } else {
+                    //         errors.age = 'Sorry the age is required'
+                    //     }
 
-                        if(!values.message){
-                            errors.message = 'Sorry the input is required'
-                        }
+                    //     if(!values.message){
+                    //         errors.message = 'Sorry the input is required'
+                    //     }
 
-                        return errors;
-                    }}
+                    //     return errors;
+                    // }}
 
                     
                     onSubmit={ (values, {resetForm}) =>{
