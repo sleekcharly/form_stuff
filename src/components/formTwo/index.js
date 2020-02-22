@@ -4,7 +4,8 @@ import { Formik } from 'formik';
 class FormTwo extends Component {
 
     state = {
-        maxAge:81
+        maxAge:81,
+        submitting: false
     }
 
     generateOptions = () => {
@@ -52,9 +53,14 @@ class FormTwo extends Component {
                         return errors;
                     }}
 
-                    onSubmit={ values =>{
-                        ///submit to server
-                        console.log(values)
+                    
+                    onSubmit={ (values, {resetForm}) =>{
+                        this.setState({submitting: true})
+                        setTimeout(() => {
+                            console.log(values)
+                            resetForm();
+                            this.setState({submitting: false})
+                        }, 2000)
                     }}
                 >
                     { ({
@@ -149,8 +155,7 @@ class FormTwo extends Component {
                             <button 
                                 type="submit"
                                 className="btn btn-primary"
-                                onClick={(event)=>this.submitForm(event)}
-                                disabled={this.state.loading}
+                                disabled={this.state.submitting}
                             >
                                 Submit
                             </button>
